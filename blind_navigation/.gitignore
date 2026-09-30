@@ -1,0 +1,9 @@
+venv/
+__pycache__/
+*.pyc
+.DS_Store
+.streamlit/
+models/*.pt
+!models/yolo11n.pt
+.env
+.pytest_cache/

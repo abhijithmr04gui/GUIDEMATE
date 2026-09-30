@@ -12,7 +12,7 @@ from src.detector import ObjectDetector
 from src.distance import estimate_proximity, get_zone
 from src.navigation import NavigationEngine
 from src.motor import VirtualMotorController
-from src.config import CAMERA_INDEX, CONFIDENCE_THRESHOLD
+from src.config import CAMERA_INDEX, CONFIDENCE_THRESHOLD, AUDIO_COOLDOWN_SECONDS
 
 # Configure page (Dark theme defaults in Streamlit, but we can enforce some CSS if needed)
 st.set_page_config(page_title="AI Vision Navigation Assistant", layout="wide", initial_sidebar_state="expanded")
@@ -294,7 +294,7 @@ if st.session_state.is_running:
             current_time = time.time()
             audio_played = False
             if enable_audio:
-                if decision != st.session_state.last_spoken_decision or (current_time - st.session_state.last_spoken_time > 3.0):
+                if decision != st.session_state.last_spoken_decision or (current_time - st.session_state.last_spoken_time > AUDIO_COOLDOWN_SECONDS) or (decision == "STOP" and current_time - st.session_state.last_spoken_time > 1.5):
                     if decision in ["MOVE LEFT", "MOVE RIGHT", "STOP"]:
                         os.system(f"say '{decision}' &")
                         audio_played = True
